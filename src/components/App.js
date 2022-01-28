@@ -5,25 +5,35 @@ import { Section } from "./Section/Section";
 import { Statistics } from "./Statistics/Statistics";
 
 export const App = () => {
-  const [state, setState] = useState({ good: 0, neutral: 0, bad: 0 });
-  const { good, bad, neutral } = state;
-  const options = Object.keys(state);
+  const [good, setGood] = useState(0);
+  const [neutral, setNeutral] = useState(0);
+  const [bad, setBad] = useState(0);
 
   const onLeaveFeedback = (event) => {
-    const key = event.target.name;
-    setState((prevState) => {
-      return { ...prevState, [key]: prevState[key] + 1 };
-    });
+    const { name } = event.target;
+    switch (name) {
+      case "good":
+        setGood(good + 1);
+        break;
+      case "neutral":
+        setNeutral(neutral + 1);
+        break;
+      case "bad":
+        setBad(bad + 1);
+        break;
+      default:
+        return;
+    }
   };
-
   const countTotalFeedback = () => {
-    return good + bad + neutral;
+    return Number(good) + Number(neutral) + Number(bad);
   };
   const countPositiveFeedbackPercentage = (num) => {
     return Math.round((num * 100) / countTotalFeedback());
   };
   const totalStats = countTotalFeedback();
   const positiveStats = countPositiveFeedbackPercentage(good);
+  const options = Object.keys({ good, neutral, bad });
 
   return (
     <>
